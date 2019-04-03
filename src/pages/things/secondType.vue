@@ -1,8 +1,8 @@
 <template>
   <div class="allWrap" ref="allWrapHeight">
     <ul class="leftWrap">
-      <li class="content" v-for="(item,index) in judge.judgeTypeSecond?judge.judgeTypeSecond.slice(0,judge.judgeTypeSecond.length/2):[]">
-        <img :src="item.bannerInfo.picUrl" :style="{height:item.bannerInfo.height*230/1000+'px'}">
+      <li class="content" v-for="(item,index) in oddArr">
+        <img :src="item.bannerInfo.picUrl" :style="{height:item.bannerInfo.height*230/1000>600?item.bannerInfo.height*230/2000:item.bannerInfo.height*230/1000+'px'}">
         <p v-if="item.content&&item.content !== ' '">{{item.content}}</p>
         <div class="foot">
           <div class="left">
@@ -17,8 +17,8 @@
       </li>
     </ul>
     <ul class="rightWrap">
-      <li class="content" v-for="(item,index) in judge.judgeTypeSecond?judge.judgeTypeSecond.slice(judge.judgeTypeSecond.length/2+1):[]">
-        <img :src="item.bannerInfo.picUrl" :style="{height:item.bannerInfo.height*230/1000+'px'}">
+      <li class="content" v-for="(item,index) in evelArr">
+        <img :src="item.bannerInfo.picUrl" :style="{height:item.bannerInfo.height*230/1000>600?item.bannerInfo.height*230/2000:item.bannerInfo.height*230/1000+'px'}">
         <p v-if="item.content&&item.content !== ' '">{{item.content}}</p>
         <div class="foot">
           <div class="left">
@@ -46,13 +46,31 @@
     props:{
       judge:Object
     },
+    data(){
+      return{
+        oddArr:[],
+        evelArr:[]
+      }
+    },
     mounted(){
+      this.oddArr = this.judge.judgeTypeSecond.filter((item,index)=>{
+        return index%2===0
+      })
+      this.evelArr = this.judge.judgeTypeSecond.filter((item,index)=>{
+        return index%2!==0
+      })
       this.$store.dispatch('saveHeight',this.$refs.allWrapHeight.clientHeight)
     },
     watch:{
       judge:{
         deep:true,
         handler:function () {
+          this.oddArr = this.judge.judgeTypeSecond.filter((item,index)=>{
+            return index%2===0
+          })
+          this.evelArr = this.judge.judgeTypeSecond.filter((item,index)=>{
+            return index%2!==0
+          })
           this.$nextTick(()=>{
             this.$store.dispatch('saveHeight',this.$refs.allWrapHeight.clientHeight)
           })

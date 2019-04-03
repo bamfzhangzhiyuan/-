@@ -101,15 +101,17 @@
     watch:{
       data:{
         deep:true,
+
         handler:function () {
-            this.updata = true
+          console.log("ss");
+          this.updata = true
             const allHeight = this.ulHeight +this.headHeight + this.height
 
 
 
             this.$nextTick(()=>{
 
-               this.ulHeighte = this.$refs.thingUl.clientHeight
+              this.ulHeighte = this.$refs.thingUl.clientHeight
 
               let swiper = new Swiper('.swiper-container', {
                 slidesPerView: 3,

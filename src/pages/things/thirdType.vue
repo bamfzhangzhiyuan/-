@@ -1,8 +1,8 @@
 <template>
   <div class="allWrap" ref="allWrapHeight">
     <ul class="leftWrap">
-      <li class="content" v-for="(item,index) in judge.judgeTypeThird?judge.judgeTypeThird.slice(0,judge.judgeTypeThird.length/2):[]">
-        <img :src="item.bannerInfo.picUrl" :style="{height:item.bannerInfo.height*230/1000+'px'}">
+      <li class="content" v-for="(item,index) in oddArr">
+        <img :src="item.bannerInfo.picUrl" :style="{height:item.bannerInfo.height*230/1000>600?item.bannerInfo.height*230/2000:item.bannerInfo.height*230/1000+'px'}">
         <p >{{item.collection.title}}</p>
         <h2>
           {{item.collection.subtitle}}
@@ -10,8 +10,8 @@
       </li>
     </ul>
     <ul class="rightWrap">
-      <li class="content" v-for="(item,index) in judge.judgeTypeThird?judge.judgeTypeThird.slice(judge.judgeTypeThird.length/2+1):[]">
-        <img :src="item.bannerInfo.picUrl" :style="{height:item.bannerInfo.height*230/1000+'px'}">
+      <li class="content" v-for="(item,index) in evelArr">
+        <img :src="item.bannerInfo.picUrl" :style="{height:item.bannerInfo.height*230/1000>600?item.bannerInfo.height*230/2000:item.bannerInfo.height*230/1000+'px'}">
         <p >{{item.collection.title}}</p>
         <h2>
           {{item.collection.subtitle}}
@@ -32,13 +32,31 @@
     props:{
       judge:Object
     },
+    data(){
+      return{
+        oddArr:[],
+        evelArr:[]
+      }
+    },
     mounted(){
+      this.oddArr = this.judge.judgeTypeThird.filter((item,index)=>{
+        return index%2===0
+      })
+      this.evelArr = this.judge.judgeTypeThird.filter((item,index)=>{
+        return index%2!==0
+      })
       this.$store.dispatch('saveHeight',this.$refs.allWrapHeight.clientHeight)
     },
     watch:{
       judge:{
         deep:true,
         handler:function () {
+          this.oddArr = this.judge.judgeTypeThird.filter((item,index)=>{
+            return index%2===0
+          })
+          this.evelArr = this.judge.judgeTypeThird.filter((item,index)=>{
+            return index%2!==0
+          })
           this.$nextTick(()=>{
             this.$store.dispatch('saveHeight',this.$refs.allWrapHeight.clientHeight)
           })

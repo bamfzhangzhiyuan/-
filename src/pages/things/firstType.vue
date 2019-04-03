@@ -1,8 +1,8 @@
 <template>
 <div class="allWrap" ref="allWrapHeight">
   <ul class="leftWrap">
-    <li class="content" v-for="(item,index) in judge.judgeTypeFirst?judge.judgeTypeFirst.slice(0,judge.judgeTypeFirst.length/2):[]">
-      <img :src="item.bannerInfo.picUrl" :style="{height:item.bannerInfo.height*230/1000+'px'}">
+    <li class="content" v-for="(item,index) in oddArr">
+      <img :src="item.bannerInfo.picUrl" :style="{height:item.bannerInfo.height*230/1000>600?item.bannerInfo.height*230/2000:item.bannerInfo.height*230/1000+'px'}">
       <p v-if="item.content&&item.content !== ' '">{{item.content}}</p>
       <div class="foot">
         <div class="left">
@@ -17,8 +17,8 @@
     </li>
   </ul>
   <ul class="rightWrap">
-    <li class="content" v-for="(item,index) in judge.judgeTypeFirst?judge.judgeTypeFirst.slice(judge.judgeTypeFirst.length/2+1):[]">
-      <img v-lazy="item.bannerInfo.picUrl" :style="{height:item.bannerInfo.height*230/1000+'px'}">
+    <li class="content" v-for="(item,index) in evelArr">
+      <img v-lazy="item.bannerInfo.picUrl" :style="{height:item.bannerInfo.height*230/1000>600?item.bannerInfo.height*230/2000:item.bannerInfo.height*230/1000+'px'}">
       <p v-if="item.content&&item.content !== ' '">{{item.content}}</p>
       <div class="foot">
         <div class="left">
@@ -46,14 +46,38 @@ export default{
   props:{
     judge:Object
   },
+  data(){
+    return {
+      oddArr:[],
+      evelArr:[]
+    }
+  },
   mounted(){
+
+    this.oddArr = this.judge.judgeTypeFirst.filter((item,index)=>{
+      return index%2===0
+    })
+    this.evelArr = this.judge.judgeTypeFirst.filter((item,index)=>{
+      return index%2!==0
+    })
     this.$store.dispatch('saveHeight',this.$refs.allWrapHeight.clientHeight)
   },
+  computed:{
 
+  },
   watch:{
     judge:{
       deep:true,
       handler:function () {
+
+          this.oddArr = this.judge.judgeTypeFirst.filter((item,index)=>{
+            return index%2===0
+          })
+
+        this.evelArr = this.judge.judgeTypeFirst.filter((item,index)=>{
+            return index%2!==0
+          })
+        console.log(this.oddArr.length,this.evelArr.length)
         this.$nextTick(()=>{
           this.$store.dispatch('saveHeight',this.$refs.allWrapHeight.clientHeight)
         })

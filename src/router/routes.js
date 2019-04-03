@@ -40,9 +40,6 @@ export default [
   {
     path:"/personal",
     component:Personal,
-    meta:{
-      isshow:true
-    }
   },
   {
     path:"/shopcar",
@@ -115,6 +112,6 @@ export default [
   },
   {
     path:"*",
-    compoent:Notfound
+    component:Home
   }
 ]
